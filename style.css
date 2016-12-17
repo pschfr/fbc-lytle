@@ -1,0 +1,30 @@
+/**
+ * Theme Name: Baton Child
+ * Template: baton
+ * Theme URI: https://slocumthemes.com/wordpress-themes/baton/
+ * Description: A fast, clean, and beautiful website building experience. Baton is a multipurpose theme with an intuitive drag-and-drop homepage layout builder for a wide range of website designs. Create your layouts using our live edit front-end widgets to perfectly match your design and content together. Baton is compatible with popular plugins like Jetpack, Yoast SEO, Gravity Forms and more.
+ * Text Domain: baton
+ * Author: Slocum Studio
+ * Author URI: https://slocumthemes.com/
+ * Version: 1.0.6
+ * License: GPL2+
+ * License URI: http://www.gnu.org/licenses/gpl.html
+ * Tags: one-column, two-columns, left-sidebar, right-sidebar, grid-layout, custom-background, custom-colors, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, blog, entertainment, news, photography, portfolio
+ *
+ * Baton WordPress theme, Copyright (C) 2015 Slocum Studio
+ * Baton WordPress theme is licensed under the GPL.
+ *
+ * @see readme.txt for more license information.
+ * 
+ * 
+ * EDITED OCTOBER 5, 2016 BY PAUL SCHAEFER https://paulmakesthe.net/
+ */
+#google-map {
+	min-height: 325px;
+	min-width:  250px;
+	line-height: 1.5;
+}
+#google-map .gm-style { font-family: inherit; }
+#google-map .gmnoprint { display: none; }
+
+.slocum-credit { display: none; }
