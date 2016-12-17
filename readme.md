@@ -1,5 +1,7 @@
-#A child theme of [Baton](https://wordpress.org/themes/baton/), for First Baptist Church of Lytle, TX
+#A child theme of [Baton](https://wordpress.org/themes/baton/)
+###For First Baptist Church of Lytle, TX
 [https://paulmakesthe.net/fbc/](https://paulmakesthe.net/fbc/)
+![screenshot](screenshot.png)
 
 Required Plugins:
 - [CMB2](https://wordpress.org/plugins/cmb2/)
