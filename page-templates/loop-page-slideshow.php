@@ -21,7 +21,7 @@
 
 			<!-- Article Content -->
 			<div class="article-content cf">
-				<?php echo 'TESTING'; ?>
+
 				<?php the_content(); ?>
 
 				<div class="clear"></div>

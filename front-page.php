@@ -36,7 +36,7 @@ get_header(); ?>
 								<section class="content-container content-page-container">
 									<?php get_template_part( 'yoast', 'breadcrumbs' ); // Yoast Breadcrumbs ?>
 
-									<?php get_template_part( 'loop', 'page' ); // Loop - Page ?>
+									<?php get_template_part( 'page-templates/loop', 'page-slideshow' ); // Loop - Page ?>
 
 									<!-- Comments -->
 									<?php comments_template(); // Comments ?>
@@ -67,7 +67,7 @@ get_header(); ?>
 										<section class="content-container content-home-container content-blog-container">
 											<?php get_template_part( 'yoast', 'breadcrumbs' ); // Yoast Breadcrumbs ?>
 
-											<?php get_template_part( 'loop', 'home' ); // Loop - Home ?>
+											<?php get_template_part( 'page-templates/loop', 'page-slideshow' ); // Loop - Home ?>
 
 											<?php get_template_part( 'loop', 'navigation' ); // Loop - Navigation ?>
 
