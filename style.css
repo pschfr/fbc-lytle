@@ -27,4 +27,4 @@
 #google-map .gm-style { font-family: inherit; }
 #google-map .gmnoprint { display: none; }
 
-.slocum-credit { display: none; }
+.tc { text-align: center; }

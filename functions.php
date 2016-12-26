@@ -1,43 +1,43 @@
 <?php
 function my_theme_enqueue_styles() {
-	// Enqueues the parent theme styles
-	wp_enqueue_style('baton-style', get_template_directory_uri() . '/style.css');
-	// Enqueues my child styles
-	wp_enqueue_style('child-style', get_stylesheet_directory_uri() . '/style.css', array('baton-style'), wp_get_theme()->get('Version'));
-
 	// Enqueues my custom JS
 	wp_enqueue_script('my-scripts', get_stylesheet_directory_uri() . '/scripts.js', '', '', true);
 	// Enqueues Google Maps JS API
 	wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyA3qMD5e6ox4vSJRiiUVUITQXd9Da5zCik&callback=initMap', array('my-scripts'), '', true);
+	// Enqueues my smooth scroll JS
+	wp_enqueue_script('smooth-scroll', get_stylesheet_directory_uri() . '/smoothscroll.min.js', '', '', true);
 }
 add_action('wp_enqueue_scripts', 'my_theme_enqueue_styles');
 
-// Disables edit links when logged in
-add_filter('edit_post_link', '__return_false');
-
 // Displays Custom Post Types in At a Glance widget in admin
-// http://wordpress.stackexchange.com/a/138823
+// https://github.com/pschfr/wp-plugins/
 function cpad_at_glance_content_table_end() {
-	$args = array(
-		'public' => true,
+	$post_types = get_post_types(array(
+		'public'   => true,
 		'_builtin' => false
-	);
-	$output = 'object';
-	$operator = 'and';
-	$post_types = get_post_types($args, $output, $operator);
+	), 'object', 'and');
+
+	if (current_user_can('edit_posts')) {
+		echo "<style>
+			#dashboard_right_now li a:before { content: ''; }
+			#dashboard_right_now li div.wp-menu-image { display: inline; }
+			#dashboard_right_now li div.wp-menu-image:before { color: #a0a5aa; padding: 0; }
+		</style>\n";
+	}
+
 	foreach ($post_types as $post_type) {
 		$num_posts = wp_count_posts($post_type->name);
 		$num = number_format_i18n($num_posts->publish);
 		$text = _n($post_type->labels->singular_name, $post_type->labels->name, intval($num_posts->publish));
 		if (current_user_can('edit_posts')) {
 			$output = '<a href="edit.php?post_type=' . $post_type->name . '">' . $num . ' ' . $text . '</a>';
-			echo '<li class="post-count ' . $post_type->name . '-count">' . $output . '</li>';
+			echo '<li><div class="wp-menu-image dashicons-before ' . $post_type->menu_icon . '"></div>' . $output . '</li>';
 		}
 	}
 }
 add_action('dashboard_glance_items', 'cpad_at_glance_content_table_end');
 
-// Generates Custom Post Type for Bulletins
+// Generates Custom Post Type for Weekly Bulletins and Sermons
 function bulletins_post_type() {
 	$labels = array(
 		'name'                  => 'Bulletins',
@@ -91,7 +91,6 @@ function bulletins_post_type() {
 }
 add_action('init', 'bulletins_post_type', 0);
 
-// Generates Custom Post Type for Sermons
 function sermons_post_type() {
 	$labels = array(
 		'name'                  => 'Sermons',
@@ -145,9 +144,8 @@ function sermons_post_type() {
 }
 add_action('init', 'sermons_post_type', 0);
 
+// Initiates CMB2 metaboxes for weekly bulletin and sermon
 function cmb2_metaboxes() {
-	$prefix = '_cmb2_';
-	// Initiates a CMB2 box for this week's bulletin
 	$cmb = new_cmb2_box(array(
 		'id'           => 'bulletin_metabox',
 		'title'        => 'Bulletin File',
@@ -157,11 +155,10 @@ function cmb2_metaboxes() {
 	$cmb->add_field(array(
 		'name' => 'Bulletin File',
 		'desc' => 'PDF or DOC of this week\'s bulletin',
-		'id'   => $prefix . 'bulletin_file',
+		'id'   => '_cmb2_bulletin_file',
 		'type' => 'file'
 	));
 
-	// Initiates a CMB2 box for this week's sermon
 	$cmb = new_cmb2_box(array(
 		'id'           => 'sermon_metabox',
 		'title'        => 'Sermon File',
@@ -171,8 +168,107 @@ function cmb2_metaboxes() {
 	$cmb->add_field(array(
 		'name' => 'Sermon File',
 		'desc' => 'Audio of this week\'s sermon',
-		'id'   => $prefix . 'sermon_file',
+		'id'   => '_cmb2_sermon_file',
 		'type' => 'file'
 	));
 }
 add_action('cmb2_admin_init', 'cmb2_metaboxes');
+
+function sds_social_media() {
+	global $sds_theme_options;
+
+	if ( ! empty( $sds_theme_options['social_media'] ) ) {
+		// Map the correct values for social icon display (FontAwesome webfont, i.e. 'fa-rss' = RSS icon)
+		$social_font_map = array(
+			'facebook_url' => array(
+				'icon' => 'fa fa-facebook',
+				'label' => __( 'Facebook', 'baton' )
+			),
+			'twitter_url' => array(
+				'icon' => 'fa fa-twitter',
+				'label' => __( 'Twitter', 'baton' )
+			),
+			'linkedin_url' => array(
+				'icon' => 'fa fa-linkedin',
+				'label' => __( 'LinkedIn', 'baton' )
+			),
+			'google_plus_url' => array(
+				'icon' => 'fa fa-google-plus',
+				'label' => __( 'Google+', 'baton' )
+			),
+			'youtube_url' => array(
+				'icon' => 'fa fa-youtube',
+				'label' => __( 'YouTube', 'baton' )
+			),
+			'vimeo_url' => array(
+				'icon' => 'fa fa-vimeo-square',
+				'label' => __( 'Vimeo', 'baton' )
+			),
+			'pinterest_url' => array(
+				'icon' => 'fa fa-pinterest',
+				'label' => __( 'Pinterest', 'baton' )
+			),
+			'instagram_url' => array(
+				'icon' => 'fa fa-instagram',
+				'label' => __( 'Instagram', 'baton' )
+			),
+			'flickr_url' => array(
+				'icon' => 'fa fa-flickr',
+				'label' => __( 'Flickr', 'baton' )
+			),
+			'foursquare_url' => array(
+				'icon' => 'fa fa-foursquare',
+				'label' => __( 'Foursquare', 'baton' )
+			),
+			'rss_url' => array(
+				'icon' => 'fa fa-rss',
+				'label' => __( 'RSS', 'baton' )
+			),
+		);
+
+		$social_font_map = apply_filters( 'sds_social_icon_map', $social_font_map );
+		?>
+
+		<div class="social-media-icons baton-flex baton-flex-5-columns baton-flex-social-media">
+			<?php
+				foreach( $sds_theme_options['social_media'] as $key => $url ) :
+					// RSS (use site RSS feed, $url is Boolean this case)
+					if ( $key === 'rss_url_use_site_feed' && $url ) :
+				?>
+						<a href="<?php esc_attr( bloginfo( 'rss2_url' ) ); ?>" class="rss-url baton-col baton-col-social-media" target="_blank">
+							<span class="social-media-icon <?php echo esc_attr( $social_font_map['rss_url']['icon'] ); ?>"></span>
+							<br />
+							<span class="social-media-label rss-url-label"><?php echo $social_font_map['rss_url']['label']; ?></span>
+						</a>
+				<?php
+					// RSS (use custom RSS feed)
+					elseif ( $key === 'rss_url' && ! $sds_theme_options['social_media']['rss_url_use_site_feed'] && ! empty( $url ) ) :
+				?>
+						<a href="<?php echo esc_attr( $url ); ?>" class="rss-url baton-col baton-col-social-media" target="_blank">
+							<span class="social-media-icon <?php echo esc_attr( $social_font_map['rss_url']['icon'] ); ?>"></span>
+							<br />
+							<span class="social-media-label rss-url-label"><?php echo $social_font_map['rss_url']['label']; ?></span>
+						</a>
+				<?php
+					// All other networks
+					elseif ( $key !== 'rss_url_use_site_feed' && $key !== 'rss_url' && ! empty( $url ) ) :
+						$css_class = str_replace( '_', '-', $key ); // Replace _ with -
+				?>
+						<a href="<?php echo esc_attr( $url ); ?>" class="<?php echo esc_attr( $css_class ); ?> baton-col baton-col-social-media" target="_blank">
+							<span class="social-media-icon <?php echo esc_attr( $social_font_map[$key]['icon'] ); ?>"></span>
+							<br />
+							<span class="social-media-label <?php echo esc_attr( $css_class ); ?>-label"><?php echo $social_font_map[$key]['label']; ?></span>
+						</a>
+				<?php
+					endif;
+				endforeach;
+			?>
+			<a class="to-top baton-col baton-col-social-media" href="#header">
+				<span class="fa fa-chevron-circle-up" aria-hidden="true"></span>
+				<br>
+				<span class="social-media-label rss-url-label">To Top</span>
+			</a>
+		</div>
+	<?php
+	}
+}
