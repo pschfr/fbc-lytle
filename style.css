@@ -22,9 +22,24 @@
 #google-map {
 	min-height: 325px;
 	min-width:  250px;
-	line-height: 1.5;
+	line-height: 1.5
 }
-#google-map .gm-style { font-family: inherit; }
-#google-map .gmnoprint { display: none; }
+#google-map .gm-style { font-family: inherit }
+#google-map .gmnoprint { display: none }
 
-.tc { text-align: center; }
+.tc { text-align: center }
+.tr { text-align: right }
+
+.content-wrap { padding-top: 3em }
+
+.widget-title { margin: 1rem 0 }
+.textwidget tr { border: 0 }
+.textwidget td { padding: 0 }
+
+.social-media-footer .social-media-icons a {
+	color: #747f81;
+}
+
+.social-media-footer .social-media-icons a:hover {
+	color: #394d7b;
+}

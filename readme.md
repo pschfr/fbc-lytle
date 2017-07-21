@@ -1,6 +1,6 @@
 #A child theme of [Baton](https://wordpress.org/themes/baton/)
 ###For First Baptist Church of Lytle, TX
-[https://paulmakesthe.net/fbc/](https://paulmakesthe.net/fbc/)
+[https://firstbaptistchurchlytle.com/](https://firstbaptistchurchlytle.com/)
 ![screenshot](screenshot.png)
 
 Required Plugins:
