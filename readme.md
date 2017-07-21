@@ -1,5 +1,5 @@
-#A child theme of [Baton](https://wordpress.org/themes/baton/)
-###For First Baptist Church of Lytle, TX
+# A child theme of [Baton](https://wordpress.org/themes/baton/)
+### For First Baptist Church of Lytle, TX
 [https://firstbaptistchurchlytle.com/](https://firstbaptistchurchlytle.com/)
 ![screenshot](screenshot.png)
 
